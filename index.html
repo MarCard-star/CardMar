@@ -73,27 +73,36 @@
 
   /* Glaseado */
   .icing {
-    position: absolute;
-    width: 100%;
-    height: 35px;
-    background: white;
-    top: -5px;
-    border-radius: 15px;
-    border: 4px solid #000;
-    border-bottom: none;
-    box-sizing: border-box;
-  }
-  .icing::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 25px;
-    background: white;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-    top: 20px;
-    clip-path: polygon(0 0, 100% 0, 100% 60%, 80% 50%, 60% 70%, 40% 50%, 20% 65%, 0 50%);
-  }
+  position: absolute;
+  width: 100%;
+  height: 35px;
+  background: white;
+  top: -5px;
+  border-radius: 15px;
+  border: 4px solid #000;
+  border-bottom: none;
+  box-sizing: border-box;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.icing::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 25px;
+  background: white;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  clip-path: polygon(
+    0 0, 100% 0,
+    100% 60%, 80% 50%, 60% 70%,
+    40% 50%, 20% 65%, 0 50%
+  );
+}
 
   /* Vela */
   .candle {
@@ -271,6 +280,7 @@
   </script>
 </body>
 </html>
+
 
 
 
