@@ -42,19 +42,37 @@
 
     /* Contenedor pastel */
     .cake {
-      position: relative;
-      width: 260px;
-      height: 180px;
-      background: linear-gradient(180deg, #d2691e 0%, #8b4513 100%);
-      border-radius: 0 0 50px 50px;
-      box-shadow:
-        inset 0 8px 14px #d6a65f,
-        0 10px 25px rgba(0,0,0,0.8);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      padding: 0 15px;
-    }
+  position: relative;
+  width: 260px;
+  height: 180px;
+  background: linear-gradient(180deg, #d2691e 0%, #8b4513 100%);
+  border-radius: 0 0 50px 50px;
+  box-shadow:
+    inset 0 8px 14px #d6a65f,
+    0 10px 25px rgba(0,0,0,0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 0 15px;
+  margin-top: 40px; /* <-- esto baja el pastel */
+}
+
+.candle {
+  position: absolute;
+  top: -45px; /* <-- antes estaba -70px, lo subí para bajar la vela */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 70px;
+  background: linear-gradient(180deg, #eee 0%, #ccc 100%);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 2px 5px #aaa,
+    0 0 8px rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  z-index: 10;
+}
+
 
     /* Capas de cobertura (icing) */
     .icing-layer {
@@ -67,22 +85,7 @@
       z-index: 1;
     }
 
-    /* Vela */
-    .candle {
-      position: absolute;
-      top: -70px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 14px;
-      height: 70px;
-      background: linear-gradient(180deg, #eee 0%, #ccc 100%);
-      border-radius: 6px;
-      box-shadow:
-        inset 0 2px 5px #aaa,
-        0 0 8px rgba(255, 255, 255, 0.35);
-      cursor: pointer;
-      z-index: 10;
-    }
+    
 
     /* Llama */
     .flame {
@@ -247,3 +250,4 @@
   </script>
 </body>
 </html>
+
