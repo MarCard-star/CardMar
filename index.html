@@ -5,71 +5,102 @@
   <title>Feliz Cumpleaños</title>
   <style>
     body {
-      background: black;
-      color: white;
-      font-family: "Courier New", monospace;
+      background: #1e1e1e;
+      font-family: Arial, sans-serif;
+      color: #fff;
       text-align: center;
-      padding-top: 40px;
-      overflow: hidden;
+      padding-top: 50px;
     }
 
     h1 {
-      font-size: 28px;
-      margin-bottom: 10px;
+      font-size: 36px;
+      margin-bottom: 20px;
+      color: #ffdd00;
+      text-shadow: 2px 2px 8px #000;
     }
 
     #mensaje {
-      font-size: 16px;
-      margin-bottom: 40px;
+      font-size: 18px;
+      margin-bottom: 50px;
     }
 
     .cake {
-      width: 200px; 
-      margin: 0 auto;
       position: relative;
+      display: inline-block;
+      margin: 0 auto;
     }
 
-    .cake img {
+    /* Base del pastel */
+    .cake-base {
+      width: 200px;
+      height: 100px;
+      background: #ff6b6b;
+      border-radius: 20px 20px 10px 10px;
+      position: relative;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+
+    /* Piso superior */
+    .cake-top {
+      width: 150px;
+      height: 60px;
+      background: #ff8787;
+      border-radius: 15px 15px 10px 10px;
+      position: absolute;
+      top: -50px;
+      left: 25px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+    }
+
+    /* Cobertura */
+    .icing {
+      position: absolute;
       width: 100%;
-      display: block;
+      height: 20px;
+      background: #fff2cc;
+      border-radius: 50%;
+      top: -20px;
+      left: 0;
     }
 
+    .cake-top .icing {
+      width: 100%;
+      height: 15px;
+      top: -15px;
+      border-radius: 50%;
+    }
+
+    /* Velas */
     .candle {
       width: 12px;
       height: 50px;
-      background: pink;
+      background: #ffd700;
       position: absolute;
-      top: 10px; 
-      left: 50%;
-      transform: translateX(-50%);
-      border-radius: 5px;
+      top: -60px;
+      border-radius: 3px;
     }
 
+    .candle:nth-child(1) { left: 50px; }
+    .candle:nth-child(2) { left: 90px; }
+    .candle:nth-child(3) { left: 130px; }
+
+    /* Llama */
     .flame {
-      width: 18px;
-      height: 28px;
+      width: 14px;
+      height: 22px;
       background: radial-gradient(circle, yellow 40%, orange 70%, red 90%);
       border-radius: 50%;
       position: absolute;
-      top: -28px;
+      top: -22px;
       left: 50%;
       transform: translateX(-50%);
       animation: flicker 0.2s infinite alternate;
-      transition: transform 0.5s, opacity 0.5s;
       transform-origin: center bottom;
     }
 
     @keyframes flicker {
       0% { transform: translateX(-50%) scale(1) rotate(0deg); opacity: 1; }
       100% { transform: translateX(-48%) scale(1.15) rotate(5deg); opacity: 0.85; }
-    }
-
-    @keyframes wobble {
-      0% { transform: translateX(-50%) rotate(0deg); }
-      25% { transform: translateX(-48%) rotate(8deg); }
-      50% { transform: translateX(-52%) rotate(-8deg); }
-      75% { transform: translateX(-48%) rotate(6deg); }
-      100% { transform: translateX(-50%) rotate(0deg); }
     }
 
     .wind {
@@ -99,8 +130,11 @@
       opacity: 0;
       transition: opacity 2s;
       margin-top: 30px;
-      font-size: 20px;
+      font-size: 22px;
+      color: #ffdd00;
+      text-shadow: 1px 1px 5px #000;
     }
+
   </style>
 </head>
 <body>
@@ -108,17 +142,32 @@
   <div id="mensaje">Pide un deseo… y sopla la vela 🎤🕯️</div>
 
   <div class="cake">
-    <img src="https://raw.githubusercontent.com/MarCard-star/CardMar/main/birthday_cake_ext.jpg" alt="Pastel de cumpleaños">
+    <div class="cake-base">
+      <div class="icing"></div>
+    </div>
+    <div class="cake-top">
+      <div class="icing"></div>
+    </div>
+
+    <!-- Velas -->
     <div class="candle">
-      <div class="wind" id="wind"></div>
-      <div class="flame" id="flame"></div>
+      <div class="wind" id="wind1"></div>
+      <div class="flame" id="flame1"></div>
+    </div>
+    <div class="candle">
+      <div class="wind" id="wind2"></div>
+      <div class="flame" id="flame2"></div>
+    </div>
+    <div class="candle">
+      <div class="wind" id="wind3"></div>
+      <div class="flame" id="flame3"></div>
     </div>
   </div>
 
   <div id="finalMsg">✨ ¡Que todos tus deseos se hagan realidad! ✨</div>
 
   <script>
-    let apagada = false;
+    let apagadas = [false, false, false];
 
     async function iniciarMicrofono() {
       try {
@@ -134,9 +183,9 @@
         function monitorear() {
           analyser.getByteFrequencyData(dataArray);
           let volumen = dataArray.reduce((a, b) => a + b) / dataArray.length;
-          // Ajuste de sensibilidad: se necesita soplar más fuerte
-          if (volumen > 65 && !apagada) {
-            animarVientoYApagar();
+          // Sensibilidad ajustada
+          if (volumen > 65) {
+            apagarVelas();
           }
           requestAnimationFrame(monitorear);
         }
@@ -147,34 +196,18 @@
       }
     }
 
-    function animarVientoYApagar() {
-      apagada = true;
-      const flame = document.getElementById("flame");
-      const wind = document.getElementById("wind");
-
-      wind.classList.add("active");
-
-      // La llama tiembla con el viento
-      flame.style.animation = "flicker 0.15s infinite alternate, wobble 0.5s ease-in-out 3";
-
-      setTimeout(() => {
-        flame.style.transform = "translateX(-80%) scale(0.8) rotate(-30deg)";
-        flame.style.opacity = 0.7;
-      }, 400);
-
-      setTimeout(() => {
-        flame.style.transform = "translateX(-90%) scale(0.3) rotate(-50deg)";
-        flame.style.opacity = 0.3;
-      }, 900);
-
-      setTimeout(() => {
-        flame.style.opacity = "0";
-      }, 1300);
-
-      setTimeout(() => {
-        flame.remove();
-        document.getElementById("finalMsg").style.opacity = 1;
-      }, 1800);
+    function apagarVelas() {
+      for (let i = 1; i <= 3; i++) {
+        if (!apagadas[i-1]) {
+          apagadas[i-1] = true;
+          const flame = document.getElementById(`flame${i}`);
+          const wind = document.getElementById(`wind${i}`);
+          wind.classList.add("active");
+          flame.style.transform = "translateX(-50%) scale(0.3) rotate(-50deg)";
+          flame.style.opacity = 0;
+        }
+      }
+      document.getElementById("finalMsg").style.opacity = 1;
     }
 
     iniciarMicrofono();
