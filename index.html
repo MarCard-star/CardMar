@@ -1,228 +1,204 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Pastel de Cumpleaños Mejorado</title>
-  <style>
-    /* Reset y body centrado */
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      background: #121212;
-      color: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      margin: 0;
-      padding: 60px 20px 60px 20px; /* Más espacio arriba y abajo */
-      user-select: none;
-    }
+<meta charset="UTF-8" />
+<title>Feliz Cumpleaños</title>
+<style>
+  body {
+    background: black;
+    color: white;
+    font-family: "Courier New", monospace;
+    text-align: center;
+    padding-top: 40px;
+    overflow: hidden;
+    user-select: none;
+  }
 
-    h1 {
-      margin: 0 0 20px 0;
-      font-weight: 700;
-      color: #f0c419;
-      text-shadow: 0 0 8px #f0c419;
-      font-size: 2.8rem;
-      text-align: center;
-    }
+  h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    z-index: 10;
+    position: relative;
+  }
 
-    #mensaje {
-      margin: 0 0 50px 0;
-      font-size: 1.25rem;
-      opacity: 0.85;
-      text-align: center;
-      max-width: 400px;
-      line-height: 1.3;
-    }
+  #mensaje {
+    font-size: 16px;
+    margin-bottom: 40px;
+    z-index: 10;
+    position: relative;
+  }
 
-    /* Contenedor pastel */
-    .cake {
-  position: relative;
-  width: 260px;
-  height: 180px;
-  background: linear-gradient(180deg, #d2691e 0%, #8b4513 100%);
-  border-radius: 0 0 50px 50px;
-  box-shadow:
-    inset 0 8px 14px #d6a65f,
-    0 10px 25px rgba(0,0,0,0.8);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  padding: 0 15px;
-  margin-top: 40px; /* <-- esto baja el pastel */
-}
+  /* -------- Pastel --------- */
+  .cake {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    margin: 0 auto;
+    margin-top: 60px; /* baja el pastel para no tapar texto */
+  }
 
-.candle {
-  position: absolute;
-  top: -45px; /* <-- antes estaba -70px, lo subí para bajar la vela */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 14px;
-  height: 70px;
-  background: linear-gradient(180deg, #eee 0%, #ccc 100%);
-  border-radius: 6px;
-  box-shadow:
-    inset 0 2px 5px #aaa,
-    0 0 8px rgba(255, 255, 255, 0.35);
-  cursor: pointer;
-  z-index: 10;
-}
+  /* Sombra */
+  .shadow {
+    width: 220px;
+    height: 25px;
+    background: rgba(255 255 255 / 0.15);
+    border-radius: 50%;
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    filter: blur(4px);
+  }
 
+  /* Capas pastel */
+  .layer {
+    position: absolute;
+    width: 180px;
+    height: 70px;
+    background: #ff4f7d;
+    border-radius: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid #000;
+    box-sizing: border-box;
+  }
+  .layer.bottom {
+    bottom: 0;
+  }
+  .layer.top {
+    bottom: 80px;
+    width: 160px;
+    height: 65px;
+  }
 
-    /* Capas de cobertura (icing) */
-    .icing-layer {
-      height: 25px;
-      background: linear-gradient(180deg, #fff 0%, #f0f0f0 100%);
-      border-radius: 20px;
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
-      margin: 4px 0;
-      position: relative;
-      z-index: 1;
-    }
+  /* Glaseado */
+  .icing {
+    position: absolute;
+    width: 100%;
+    height: 35px;
+    background: white;
+    top: -5px;
+    border-radius: 15px;
+    border: 4px solid #000;
+    border-bottom: none;
+    box-sizing: border-box;
+  }
+  .icing::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 25px;
+    background: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    top: 20px;
+    clip-path: polygon(0 0, 100% 0, 100% 60%, 80% 50%, 60% 70%, 40% 50%, 20% 65%, 0 50%);
+  }
 
-    
+  /* Vela */
+  .candle {
+    position: absolute;
+    width: 18px;
+    height: 50px;
+    border-radius: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 150px; /* altura de la vela */
+    background: repeating-linear-gradient(
+      -45deg,
+      white,
+      white 5px,
+      orange 5px,
+      orange 10px
+    );
+    border: 4px solid #000;
+    box-sizing: border-box;
+    cursor: pointer;
+    z-index: 20;
+    filter: drop-shadow(0 0 1px #fff);
+  }
 
-    /* Llama */
-    .flame {
-      position: absolute;
-      top: -45px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 18px;
-      height: 30px;
-      background:
-        radial-gradient(circle at 50% 80%, #ffd93b 40%, transparent 80%),
-        radial-gradient(circle at 50% 40%, #ff8c00 50%, transparent 85%);
-      border-radius: 50% 50% 60% 60% / 80% 80% 120% 120%;
-      filter: drop-shadow(0 0 10px #ffb600);
-      animation: flicker 0.25s infinite alternate;
-      transform-origin: bottom center;
-      pointer-events: none;
-      opacity: 1;
-      transition: opacity 0.7s ease, transform 0.7s ease;
-      z-index: 11;
-    }
+  /* Llama */
+  .flame {
+    position: absolute;
+    width: 20px;
+    height: 30px;
+    background: orange;
+    border-radius: 50% 50% 50% 50%;
+    border: 4px solid #000;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 190px; /* un poco más arriba que la vela */
+    box-shadow:
+      0 0 8px 2px rgba(255, 165, 0, 0.8),
+      0 0 12px 4px rgba(255, 165, 0, 0.6);
+    animation: flicker 0.25s infinite alternate;
+    transition: transform 0.5s, opacity 0.5s;
+    z-index: 25;
+  }
 
-    /* Animación parpadeo llama */
-    @keyframes flicker {
-      0% {
-        transform: translateX(-50%) scaleY(1) scaleX(1);
-        filter: drop-shadow(0 0 10px #ffb600);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(calc(-50% + 3px)) scaleY(1.1) scaleX(1.05);
-        filter: drop-shadow(0 0 15px #ffea00);
-        opacity: 0.85;
-      }
-    }
+  @keyframes flicker {
+    0% { transform: translateX(-50%) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translateX(-48%) scale(1.1) rotate(3deg); opacity: 0.85; }
+  }
 
-    /* Animación viento apagando */
-    .wind {
-      position: absolute;
-      top: -40px;
-      left: 50%;
-      width: 130px;
-      height: 30px;
-      border-radius: 30px;
-      background: linear-gradient(90deg, transparent 10%, rgba(180,220,255,0.6) 40%, rgba(180,220,255,0.4) 60%, transparent 90%);
-      transform: translateX(-160px) translateY(0);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 9;
-    }
-    .wind.active {
-      animation: blow 1s ease-out forwards;
-      opacity: 1;
-    }
+  /* Animación viento */
+  .wind {
+    position: absolute;
+    width: 220px;
+    height: 40px;
+    top: -10px;
+    left: -230px;
+    background: linear-gradient(90deg, transparent, rgba(180,220,255,0.6), transparent);
+    border-radius: 20px;
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+    z-index: 15;
+  }
 
-    @keyframes blow {
-      0% {
-        opacity: 0;
-        transform: translateX(-160px) translateY(0);
-      }
-      30% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-        transform: translateX(110px) translateY(0);
-      }
-    }
+  .wind.active {
+    animation: blow 0.8s ease-out forwards;
+  }
 
-    /* Mensaje final */
-    #finalMsg {
-      margin-top: 50px;
-      font-size: 1.4rem;
-      opacity: 0;
-      color: #f0c419;
-      text-shadow: 0 0 10px #f0c419;
-      transition: opacity 2s ease;
-      text-align: center;
-      max-width: 400px;
-    }
+  @keyframes blow {
+    0% { opacity: 0; transform: translateX(-230px); }
+    30% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(100px); }
+  }
 
-  </style>
+  #finalMsg {
+    opacity: 0;
+    transition: opacity 2s;
+    margin-top: 30px;
+    font-size: 20px;
+    color: #ffb6c1;
+  }
+</style>
 </head>
 <body>
-  <h1>FELIZ CUMPLEAÑOS MARY!!! 🎉</h1>
+  <h1>HAPPY BIRTHDAY 🎉</h1>
   <div id="mensaje">Pide un deseo… y sopla la vela 🎤🕯️</div>
 
   <div class="cake" id="cake">
-    <div class="icing-layer"></div>
-    <div class="icing-layer"></div>
-    <div class="icing-layer"></div>
+    <div class="shadow"></div>
 
-    <div class="candle" id="candle" title="Haz clic para encender la vela">
-      <div class="flame" id="flame"></div>
-      <div class="wind" id="wind"></div>
+    <div class="flame" id="flame"></div>
+    <div class="candle" id="candle"></div>
+
+    <div class="layer top">
+      <div class="icing"></div>
+    </div>
+
+    <div class="layer bottom">
+      <div class="icing"></div>
     </div>
   </div>
 
   <div id="finalMsg">✨ ¡Que todos tus deseos se hagan realidad! ✨</div>
 
   <script>
-    const flame = document.getElementById('flame');
-    const wind = document.getElementById('wind');
-    const finalMsg = document.getElementById('finalMsg');
-    const candle = document.getElementById('candle');
     let apagada = false;
-
-    // Ajusta sensibilidad aquí (más bajo = más sensible)
-    const SENSIBILIDAD = 35;
-
-    function apagarVela() {
-      if (apagada) return;
-      apagada = true;
-
-      wind.classList.add('active');
-      flame.style.animation = 'none';
-      flame.style.transform = 'translateX(20px) scale(0.5) rotate(-45deg)';
-      flame.style.opacity = '0.3';
-
-      setTimeout(() => {
-        flame.style.opacity = '0';
-      }, 800);
-
-      setTimeout(() => {
-        finalMsg.style.opacity = 1;
-      }, 1200);
-    }
-
-    candle.addEventListener('click', () => {
-      if (!apagada) return;
-      apagada = false;
-      finalMsg.style.opacity = 0;
-      wind.classList.remove('active');
-      flame.style.animation = 'flicker 0.25s infinite alternate';
-      flame.style.opacity = '1';
-      flame.style.transform = 'translateX(-50%) scale(1) rotate(0)';
-    });
 
     async function iniciarMicrofono() {
       try {
@@ -232,22 +208,66 @@
         const analyser = audioContext.createAnalyser();
         analyser.fftSize = 256;
         mic.connect(analyser);
+
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
         function monitorear() {
           analyser.getByteFrequencyData(dataArray);
           let volumen = dataArray.reduce((a, b) => a + b) / dataArray.length;
-          if (volumen > SENSIBILIDAD) apagarVela();
+
+          // Sensibilidad aumentada - baja el umbral para que sea más fácil apagar la vela
+          if (volumen > 20 && !apagada) {
+            animarVientoYApagar();
+          }
           requestAnimationFrame(monitorear);
         }
+
         monitorear();
-      } catch (e) {
-        console.warn('No se pudo acceder al micrófono', e);
+      } catch (err) {
+        console.log("No se pudo acceder al micrófono.", err);
       }
     }
+
+    function animarVientoYApagar() {
+      apagada = true;
+      const flame = document.getElementById("flame");
+      const wind = document.createElement("div");
+      wind.classList.add("wind");
+      document.getElementById("cake").appendChild(wind);
+      setTimeout(() => wind.classList.add("active"), 10);
+
+      flame.style.animation = "none";
+      flame.style.transform = "translateX(-80%) scale(0.8) rotate(-30deg)";
+      flame.style.opacity = 1;
+
+      setTimeout(() => {
+        flame.style.transform = "translateX(-90%) scale(0.3) rotate(-50deg)";
+        flame.style.opacity = 0.3;
+      }, 300);
+
+      setTimeout(() => {
+        flame.style.opacity = "0";
+      }, 700);
+
+      setTimeout(() => {
+        if(wind.parentNode) wind.parentNode.removeChild(wind);
+        document.getElementById("finalMsg").style.opacity = 1;
+      }, 1200);
+    }
+
+    // Permite prender la vela al dar clic
+    document.getElementById("candle").addEventListener("click", () => {
+      if (apagada) {
+        apagada = false;
+        const flame = document.getElementById("flame");
+        flame.style.opacity = "1";
+        flame.style.animation = "flicker 0.25s infinite alternate";
+        flame.style.transform = "translateX(-50%) scale(1) rotate(0deg)";
+        document.getElementById("finalMsg").style.opacity = 0;
+      }
+    });
 
     iniciarMicrofono();
   </script>
 </body>
 </html>
-
