@@ -1,156 +1,168 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Feliz Cumpleaños</title>
-<style>
-
+  <meta charset="UTF-8">
+  <title>Feliz Cumpleaños</title>
+  <style>
     body {
-        background: black;
-        color: white;
-        font-family: "Courier New", monospace;
-        text-align: center;
-        padding-top: 40px;
+      background: black;
+      color: white;
+      font-family: "Courier New", monospace;
+      text-align: center;
+      padding-top: 40px;
+      overflow: hidden;
     }
 
     h1 {
-        font-size: 28px;
-        margin-bottom: 10px;
+      font-size: 28px;
+      margin-bottom: 10px;
     }
 
     #mensaje {
-        font-size: 16px;
-        margin-bottom: 40px;
+      font-size: 16px;
+      margin-bottom: 40px;
     }
 
-    /* Pastel estilo minimalista */
     .cake {
-        width: 160px;
-        margin: 0 auto;
-        position: relative;
+      width: 200px; /* ajusta al tamaño de tu imagen */
+      margin: 0 auto;
+      position: relative;
     }
 
-    .cake-body {
-        width: 160px;
-        height: 120px;
-        background: #f5e4d7;
-        margin: 0 auto;
+    .cake img {
+      width: 100%;
+      display: block;
     }
 
-    .cake-top {
-        width: 160px;
-        height: 20px;
-        background: #7db9ff;
-    }
-
-    /* Vela */
     .candle {
-        width: 12px;
-        height: 50px;
-        background: pink;
-        position: absolute;
-        top: -50px;
-        left: 50%;
-        transform: translateX(-50%);
-        border-radius: 5px;
+      width: 12px;
+      height: 50px;
+      background: pink;
+      position: absolute;
+      top: 10px; /* ajusta la posición según tu imagen */
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 5px;
     }
 
     .flame {
-        width: 18px;
-        height: 28px;
-        background: radial-gradient(circle, yellow 40%, orange 70%, red 90%);
-        border-radius: 50%;
-        position: absolute;
-        top: -28px;
-        left: 50%;
-        transform: translateX(-50%);
-        animation: flicker 0.2s infinite alternate;
+      width: 18px;
+      height: 28px;
+      background: radial-gradient(circle, yellow 40%, orange 70%, red 90%);
+      border-radius: 50%;
+      position: absolute;
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: flicker 0.2s infinite alternate;
+      transition: transform 0.5s, opacity 0.5s;
     }
 
     @keyframes flicker {
-        0% { transform: translateX(-50%) scale(1); opacity: 1; }
-        100% { transform: translateX(-48%) scale(1.2); opacity: 0.85; }
+      0% { transform: translateX(-50%) scale(1); opacity: 1; }
+      100% { transform: translateX(-48%) scale(1.15); opacity: 0.85; }
     }
 
-    /* Mensaje final */
+    .wind {
+      position: absolute;
+      width: 200px;
+      height: 40px;
+      top: -10px;
+      left: -220px;
+      background: linear-gradient(90deg, transparent, rgba(180,220,255,0.6), transparent);
+      border-radius: 20px;
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+
+    .wind.active {
+      animation: blow 0.8s ease-out forwards;
+    }
+
+    @keyframes blow {
+      0% { opacity: 0; transform: translateX(-220px); }
+      30% { opacity: 1; }
+      100% { opacity: 0; transform: translateX(80px); }
+    }
+
     #finalMsg {
-        opacity: 0;
-        transition: opacity 2s;
-        margin-top: 30px;
-        font-size: 20px;
+      opacity: 0;
+      transition: opacity 2s;
+      margin-top: 30px;
+      font-size: 20px;
     }
-
-</style>
+  </style>
 </head>
 <body>
+  <h1>HAPPY BIRTHDAY 🎉</h1>
+  <div id="mensaje">Pide un deseo… y sopla la vela 🎤🕯️</div>
 
-<h1>HAPPY BIRTHDAY 🎉</h1>
-<div id="mensaje">Pide un deseo… y sopla la vela 🎤🕯️</div>
-
-<div class="cake">
-    <div class="cake-top"></div>
-    <div class="cake-body"></div>
+  <div class="cake">
+    <!-- Aquí va tu imagen del pastel -->
+    <img src="pastel.svg" alt="Pastel de cumpleaños">
 
     <div class="candle">
-        <div class="flame" id="flame"></div>
+      <div class="wind" id="wind"></div>
+      <div class="flame" id="flame"></div>
     </div>
-</div>
+  </div>
 
-<div id="finalMsg">✨ ¡Que todos tus deseos se hagan realidad! ✨</div>
+  <div id="finalMsg">✨ ¡Que todos tus deseos se hagan realidad! ✨</div>
 
-<script>
+  <script>
+    let apagada = false;
 
-// ---- DETECCIÓN DE SOPLIDO ---- //
-
-let apagada = false;
-
-async function iniciarMicrofono() {
-    try {
+    async function iniciarMicrofono() {
+      try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const mic = audioContext.createMediaStreamSource(stream);
-
         const analyser = audioContext.createAnalyser();
         analyser.fftSize = 256;
         mic.connect(analyser);
 
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
-        function revisarSoplido() {
-            analyser.getByteFrequencyData(dataArray);
-
-            let volumen = dataArray.reduce((a,b) => a+b) / dataArray.length;
-
-            // Umbral de soplido (ajustable)
-            if (volumen > 40 && !apagada) {
-                apagarVela();
-            }
-
-            requestAnimationFrame(revisarSoplido);
+        function monitorear() {
+          analyser.getByteFrequencyData(dataArray);
+          let volumen = dataArray.reduce((a, b) => a + b) / dataArray.length;
+          if (volumen > 40 && !apagada) {
+            animarVientoYApagar();
+          }
+          requestAnimationFrame(monitorear);
         }
 
-        revisarSoplido();
-
-    } catch (err) {
-        console.log("No se pudo acceder al micrófono.");
+        monitorear();
+      } catch (err) {
+        console.log("No se pudo acceder al micrófono.", err);
+      }
     }
-}
 
-function apagarVela() {
-    apagada = true;
-    const flame = document.getElementById("flame");
-    flame.style.transition = "opacity 1s";
-    flame.style.opacity = 0;
+    function animarVientoYApagar() {
+      apagada = true;
+      const flame = document.getElementById("flame");
+      const wind = document.getElementById("wind");
 
-    setTimeout(() => {
+      wind.classList.add("active");
+      flame.style.animation = "none";
+      flame.style.transform = "translateX(-80%) scale(0.8) rotate(-30deg)";
+
+      setTimeout(() => {
+        flame.style.transform = "translateX(-90%) scale(0.3) rotate(-50deg)";
+        flame.style.opacity = 0.3;
+      }, 300);
+
+      setTimeout(() => {
+        flame.style.opacity = "0";
+      }, 700);
+
+      setTimeout(() => {
         flame.remove();
         document.getElementById("finalMsg").style.opacity = 1;
-    }, 1200);
-}
+      }, 1200);
+    }
 
-iniciarMicrofono();
-
-</script>
-
+    iniciarMicrofono();
+  </script>
 </body>
 </html>
