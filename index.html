@@ -78,6 +78,7 @@
       position: absolute;
       top: -60px;
       border-radius: 3px;
+      cursor: pointer;
     }
 
     .candle:nth-child(1) { left: 50px; }
@@ -150,15 +151,15 @@
     </div>
 
     <!-- Velas -->
-    <div class="candle">
+    <div class="candle" id="candle1">
       <div class="wind" id="wind1"></div>
       <div class="flame" id="flame1"></div>
     </div>
-    <div class="candle">
+    <div class="candle" id="candle2">
       <div class="wind" id="wind2"></div>
       <div class="flame" id="flame2"></div>
     </div>
-    <div class="candle">
+    <div class="candle" id="candle3">
       <div class="wind" id="wind3"></div>
       <div class="flame" id="flame3"></div>
     </div>
@@ -183,8 +184,8 @@
         function monitorear() {
           analyser.getByteFrequencyData(dataArray);
           let volumen = dataArray.reduce((a, b) => a + b) / dataArray.length;
-          // Sensibilidad ajustada
-          if (volumen > 65) {
+          // Sensibilidad más baja (requiere soplar más fuerte)
+          if (volumen > 90) {
             apagarVelas();
           }
           requestAnimationFrame(monitorear);
@@ -208,6 +209,20 @@
         }
       }
       document.getElementById("finalMsg").style.opacity = 1;
+    }
+
+    function prenderVela(i) {
+      apagadas[i-1] = false;
+      const flame = document.getElementById(`flame${i}`);
+      const wind = document.getElementById(`wind${i}`);
+      wind.classList.remove("active");
+      flame.style.transform = "translateX(-50%) scale(1) rotate(0deg)";
+      flame.style.opacity = 1;
+    }
+
+    // Agregar evento click a cada vela
+    for (let i = 1; i <= 3; i++) {
+      document.getElementById(`candle${i}`).addEventListener('click', () => prenderVela(i));
     }
 
     iniciarMicrofono();
