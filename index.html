@@ -6,7 +6,7 @@
   <style>
     body {
       background: #1e1e1e;
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       color: #fff;
       text-align: center;
       padding-top: 50px;
@@ -30,29 +30,41 @@
       margin: 0 auto;
     }
 
-    /* Base del pastel */
+    /* Piso base */
     .cake-base {
-      width: 200px;
+      width: 220px;
       height: 100px;
       background: #ff6b6b;
-      border-radius: 20px 20px 10px 10px;
+      border-radius: 20px 20px 15px 15px;
       position: relative;
       box-shadow: 0 5px 15px rgba(0,0,0,0.5);
     }
 
-    /* Piso superior */
-    .cake-top {
-      width: 150px;
-      height: 60px;
+    /* Piso intermedio */
+    .cake-middle {
+      width: 180px;
+      height: 80px;
       background: #ff8787;
       border-radius: 15px 15px 10px 10px;
       position: absolute;
-      top: -50px;
-      left: 25px;
+      top: -70px;
+      left: 20px;
       box-shadow: 0 3px 10px rgba(0,0,0,0.4);
     }
 
-    /* Cobertura */
+    /* Piso superior */
+    .cake-top {
+      width: 140px;
+      height: 60px;
+      background: #ffa1a1;
+      border-radius: 15px 15px 10px 10px;
+      position: absolute;
+      top: -120px;
+      left: 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    /* Cobertura de glaseado */
     .icing {
       position: absolute;
       width: 100%;
@@ -63,27 +75,30 @@
       left: 0;
     }
 
-    .cake-top .icing {
-      width: 100%;
+    .cake-middle .icing {
       height: 15px;
       top: -15px;
-      border-radius: 50%;
+    }
+
+    .cake-top .icing {
+      height: 12px;
+      top: -12px;
     }
 
     /* Velas */
     .candle {
-      width: 12px;
+      width: 14px;
       height: 50px;
       background: #ffd700;
       position: absolute;
-      top: -60px;
+      top: -170px;
       border-radius: 3px;
       cursor: pointer;
     }
 
-    .candle:nth-child(1) { left: 50px; }
-    .candle:nth-child(2) { left: 90px; }
-    .candle:nth-child(3) { left: 130px; }
+    .candle:nth-child(4) { left: 50px; }
+    .candle:nth-child(5) { left: 100px; }
+    .candle:nth-child(6) { left: 150px; }
 
     /* Llama */
     .flame {
@@ -106,7 +121,7 @@
 
     .wind {
       position: absolute;
-      width: 200px;
+      width: 220px;
       height: 40px;
       top: -10px;
       left: -220px;
@@ -135,7 +150,6 @@
       color: #ffdd00;
       text-shadow: 1px 1px 5px #000;
     }
-
   </style>
 </head>
 <body>
@@ -144,6 +158,9 @@
 
   <div class="cake">
     <div class="cake-base">
+      <div class="icing"></div>
+    </div>
+    <div class="cake-middle">
       <div class="icing"></div>
     </div>
     <div class="cake-top">
@@ -184,8 +201,8 @@
         function monitorear() {
           analyser.getByteFrequencyData(dataArray);
           let volumen = dataArray.reduce((a, b) => a + b) / dataArray.length;
-          // Sensibilidad más baja (requiere soplar más fuerte)
-          if (volumen > 90) {
+          // Sensibilidad más alta: baja el valor para que se apague fácil
+          if (volumen > 40) {
             apagarVelas();
           }
           requestAnimationFrame(monitorear);
@@ -220,7 +237,7 @@
       flame.style.opacity = 1;
     }
 
-    // Agregar evento click a cada vela
+    // Evento click para prender vela
     for (let i = 1; i <= 3; i++) {
       document.getElementById(`candle${i}`).addEventListener('click', () => prenderVela(i));
     }
