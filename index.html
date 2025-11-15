@@ -2,114 +2,119 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Pastel Animado con Vela</title>
+  <title>Pastel de Cumpleaños Mejorado</title>
   <style>
+    /* Reset y body centrado */
+    * {
+      box-sizing: border-box;
+    }
     body {
       background: #121212;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
       min-height: 100vh;
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #fff;
-      padding-top: 50px;
+      padding: 60px 20px 60px 20px; /* Más espacio arriba y abajo */
       user-select: none;
     }
 
     h1 {
-      margin-bottom: 15px;
+      margin: 0 0 20px 0;
       font-weight: 700;
       color: #f0c419;
       text-shadow: 0 0 8px #f0c419;
+      font-size: 2.8rem;
+      text-align: center;
     }
 
     #mensaje {
-      margin-bottom: 40px;
-      font-size: 18px;
-      opacity: 0.9;
+      margin: 0 0 50px 0;
+      font-size: 1.25rem;
+      opacity: 0.85;
+      text-align: center;
+      max-width: 400px;
+      line-height: 1.3;
     }
 
-    /* Pastel */
+    /* Contenedor pastel */
     .cake {
       position: relative;
-      width: 240px;
+      width: 260px;
       height: 180px;
-      background: #a0522d; /* chocolate base */
-      border-radius: 0 0 30px 30px;
+      background: linear-gradient(180deg, #d2691e 0%, #8b4513 100%);
+      border-radius: 0 0 50px 50px;
       box-shadow:
-        inset 0 6px 10px #d2a679,
-        0 8px 15px rgba(0,0,0,0.7);
+        inset 0 8px 14px #d6a65f,
+        0 10px 25px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding: 0 15px;
     }
 
-    /* Capas de cobertura */
+    /* Capas de cobertura (icing) */
     .icing-layer {
-      position: absolute;
-      left: 10px;
-      right: 10px;
       height: 25px;
-      background: #fff;
+      background: linear-gradient(180deg, #fff 0%, #f0f0f0 100%);
       border-radius: 20px;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-    }
-    .icing1 {
-      top: 15px;
-    }
-    .icing2 {
-      top: 70px;
-    }
-    .icing3 {
-      top: 125px;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+      margin: 4px 0;
+      position: relative;
+      z-index: 1;
     }
 
     /* Vela */
     .candle {
       position: absolute;
-      top: -60px;
+      top: -70px;
       left: 50%;
       transform: translateX(-50%);
-      width: 10px;
-      height: 60px;
-      background: linear-gradient(180deg, #eee 0%, #ddd 100%);
-      border-radius: 5px;
+      width: 14px;
+      height: 70px;
+      background: linear-gradient(180deg, #eee 0%, #ccc 100%);
+      border-radius: 6px;
       box-shadow:
         inset 0 2px 5px #aaa,
-        0 0 5px rgba(255, 255, 255, 0.4);
+        0 0 8px rgba(255, 255, 255, 0.35);
       cursor: pointer;
+      z-index: 10;
     }
 
     /* Llama */
     .flame {
       position: absolute;
-      top: -40px;
+      top: -45px;
       left: 50%;
       transform: translateX(-50%);
-      width: 16px;
-      height: 28px;
+      width: 18px;
+      height: 30px;
       background:
-        radial-gradient(circle at 50% 80%, #ffd93b 30%, transparent 70%),
-        radial-gradient(circle at 50% 40%, #ff8c00 40%, transparent 70%);
+        radial-gradient(circle at 50% 80%, #ffd93b 40%, transparent 80%),
+        radial-gradient(circle at 50% 40%, #ff8c00 50%, transparent 85%);
       border-radius: 50% 50% 60% 60% / 80% 80% 120% 120%;
-      filter: drop-shadow(0 0 8px #ffb600);
+      filter: drop-shadow(0 0 10px #ffb600);
       animation: flicker 0.25s infinite alternate;
       transform-origin: bottom center;
       pointer-events: none;
       opacity: 1;
       transition: opacity 0.7s ease, transform 0.7s ease;
-      z-index: 2;
+      z-index: 11;
     }
 
-    /* Animación de parpadeo */
+    /* Animación parpadeo llama */
     @keyframes flicker {
       0% {
         transform: translateX(-50%) scaleY(1) scaleX(1);
-        filter: drop-shadow(0 0 8px #ffb600);
+        filter: drop-shadow(0 0 10px #ffb600);
         opacity: 1;
       }
       100% {
-        transform: translateX(calc(-50% + 2px)) scaleY(1.1) scaleX(1.05);
-        filter: drop-shadow(0 0 12px #ffea00);
+        transform: translateX(calc(-50% + 3px)) scaleY(1.1) scaleX(1.05);
+        filter: drop-shadow(0 0 15px #ffea00);
         opacity: 0.85;
       }
     }
@@ -119,13 +124,14 @@
       position: absolute;
       top: -40px;
       left: 50%;
-      width: 120px;
+      width: 130px;
       height: 30px;
       border-radius: 30px;
       background: linear-gradient(90deg, transparent 10%, rgba(180,220,255,0.6) 40%, rgba(180,220,255,0.4) 60%, transparent 90%);
-      transform: translateX(-150px) translateY(0);
+      transform: translateX(-160px) translateY(0);
       opacity: 0;
       pointer-events: none;
+      z-index: 9;
     }
     .wind.active {
       animation: blow 1s ease-out forwards;
@@ -135,39 +141,41 @@
     @keyframes blow {
       0% {
         opacity: 0;
-        transform: translateX(-150px) translateY(0);
+        transform: translateX(-160px) translateY(0);
       }
       30% {
         opacity: 1;
       }
       100% {
         opacity: 0;
-        transform: translateX(100px) translateY(0);
+        transform: translateX(110px) translateY(0);
       }
     }
 
     /* Mensaje final */
     #finalMsg {
-      margin-top: 40px;
-      font-size: 20px;
+      margin-top: 50px;
+      font-size: 1.4rem;
       opacity: 0;
       color: #f0c419;
       text-shadow: 0 0 10px #f0c419;
       transition: opacity 2s ease;
+      text-align: center;
+      max-width: 400px;
     }
 
   </style>
 </head>
 <body>
-  <h1>HAPPY BIRTHDAY 🎉</h1>
+  <h1>FELIZ CUMPLEAÑOS MARY!!! 🎉</h1>
   <div id="mensaje">Pide un deseo… y sopla la vela 🎤🕯️</div>
 
   <div class="cake" id="cake">
-    <div class="icing-layer icing1"></div>
-    <div class="icing-layer icing2"></div>
-    <div class="icing-layer icing3"></div>
+    <div class="icing-layer"></div>
+    <div class="icing-layer"></div>
+    <div class="icing-layer"></div>
 
-    <div class="candle" id="candle">
+    <div class="candle" id="candle" title="Haz clic para encender la vela">
       <div class="flame" id="flame"></div>
       <div class="wind" id="wind"></div>
     </div>
@@ -182,10 +190,9 @@
     const candle = document.getElementById('candle');
     let apagada = false;
 
-    // Sensibilidad para soplar (ajusta según quieras)
-    const SENSIBILIDAD = 25;
+    // Ajusta sensibilidad aquí (más bajo = más sensible)
+    const SENSIBILIDAD = 35;
 
-    // Función para apagar la vela con animación de viento
     function apagarVela() {
       if (apagada) return;
       apagada = true;
@@ -204,7 +211,6 @@
       }, 1200);
     }
 
-    // Función para prender vela al hacer clic
     candle.addEventListener('click', () => {
       if (!apagada) return;
       apagada = false;
@@ -215,7 +221,6 @@
       flame.style.transform = 'translateX(-50%) scale(1) rotate(0)';
     });
 
-    // Micrófono y detección de soplido
     async function iniciarMicrofono() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -239,7 +244,6 @@
     }
 
     iniciarMicrofono();
-
   </script>
 </body>
 </html>
